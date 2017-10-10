@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BandaHealthLogs.iml" filepath="$PROJECT_DIR$/.idea/modules/BandaHealthLogs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BandaHealthLogs_main.iml" filepath="$PROJECT_DIR$/.idea/modules/BandaHealthLogs_main.iml" group="BandaHealthLogs" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BandaHealthLogs_test.iml" filepath="$PROJECT_DIR$/.idea/modules/BandaHealthLogs_test.iml" group="BandaHealthLogs" />
+    </modules>
+  </component>
+</project>
