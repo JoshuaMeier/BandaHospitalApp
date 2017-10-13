@@ -1,5 +1,10 @@
 import java.util.LinkedList;
 
+/*
+This is the head linkedlist to the data structure. It creates a list of type
+Excep called excepTypes and adds the name of the exception and the date and
+time the exception was called to the linked list.
+ */
 public class ExcepTypes {
     String nameOfExcep, dateAndTime;
     LinkedList<Excep> excepTypes = new LinkedList<Excep>();
@@ -12,7 +17,12 @@ public class ExcepTypes {
         excepTypes.add(new Excep(dateAndTime, nameOfExcep));
     }
 
+    public void add(String dateAndTime, String nameOfExcep) {
+        excepTypes.add(new Excep(dateAndTime, nameOfExcep));
+    }
+
     public String getNameOfExcep() {
+
         return nameOfExcep;
     }
 
