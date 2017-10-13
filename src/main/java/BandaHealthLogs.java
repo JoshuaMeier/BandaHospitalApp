@@ -4,6 +4,7 @@ import java.io.*;
 public class BandaHealthLogs {
   public static void main(String[] args) {
     ExceptionType exceptionList = new ExceptionType();
+    ParseLog parser = new ParseLog(exceptionList);
 
     String log;
 		//reading a line from the log
@@ -12,7 +13,7 @@ public class BandaHealthLogs {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(fin))) {
 			for(int i=0;i<100;i++) {
 				log = reader.readLine();
-				ParseLog.parse(log, exceptionList);
+				parser.parse(log);
 			}
 			//System.out.println(log);
 		} catch (IOException ex) {

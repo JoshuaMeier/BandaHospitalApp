@@ -8,36 +8,52 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class SendEmail {
-  public static void send(String errorMessage, String subject) {
+    // Get system properties
+    private static Properties properties = new Properties();
+    Session session;
+
+    public SendEmail(String host, int port) {
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", Integer.toString(port));
+
+        session = Session.getDefaultInstance(properties);
+    }
+
+    public SendEmail() {
+        // Setup mail server
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.socketFactory.port", "465");
+        properties.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.auth", "true");
+
+        // Sending email with Google's SMTP
+        final String user = "letusoftwareengineeringtest@gmail.com";
+        final String password = "HamboneandSwoop";
+
+        session = Session.getDefaultInstance(properties,
+                new javax.mail.Authenticator(){
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(user, password);
+                    }
+                });
+    }
+    public void send(String sender, String receiver, String errorMessage, String subject) {
       System.out.println("Sending email");
       // Recipient's email ID needs to be mentioned.
-      String to = "letusoftwareengineeringtest@gmail.com";
+      String to = sender;
 
       // Sender's email ID needs to be mentioned
-      String from = "letusoftwareengineeringtest@gmail.com";
-
-      // Assuming you are sending email from localhost
-      final String user = "letusoftwareengineeringtest@gmail.com";
-      final String password = "HamboneandSwoop";
-
-      // Get system properties
-      Properties properties = new Properties();
-
-      // Setup mail server
-      properties.put("mail.smtp.host", "smtp.gmail.com");
-      properties.put("mail.smtp.socketFactory.port", "465");
-      properties.put("mail.smtp.socketFactory.class",
-                    "javax.net.ssl.SSLSocketFactory");
-      properties.put("mail.smtp.port", "465");
-      properties.put("mail.smtp.auth", "true");
+      String from = receiver;
 
       // Get the default Session object.
-      Session session = Session.getDefaultInstance(properties,
+      /*Session session = Session.getDefaultInstance(properties,
       new javax.mail.Authenticator(){
           protected PasswordAuthentication getPasswordAuthentication() {
             return new PasswordAuthentication(user, password);
           }
-      });
+      });*/
 
       try {
          // Create a default MimeMessage object.
@@ -61,6 +77,6 @@ public class SendEmail {
       }catch (MessagingException mex) {
          mex.printStackTrace();
       }
-   }
+    }
 
 }

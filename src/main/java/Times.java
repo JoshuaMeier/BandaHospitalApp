@@ -9,7 +9,7 @@ public class Times {
 	}
 
 	public Times(double time) {
-			String subject = ParseLog.split[0] + ParseLog.split[1];
-			SendEmail.send(ParseLog.split[2], subject);
+			//String subject = ParseLog.split[0] + ParseLog.split[1];
+			//SendEmail.send("from@test.com", "to@test.com", ParseLog.split[2], subject);
 		}
 	}
