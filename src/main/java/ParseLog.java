@@ -1,13 +1,13 @@
 public class ParseLog {
 	//This will be how logs are parsed into our program
 	String[] split = null;
-	ExceptionType exceptions = null;
+	ExcepTypes exceptions = null;
 	private String log;
-	public ParseLog(String log, ExceptionType exceptions) {
+	public ParseLog(String log, ExcepTypes exceptions) {
 	    this.log = log;
 	    this.exceptions = exceptions;
     }
-    public ParseLog(ExceptionType exceptions) {
+    public ParseLog(ExcepTypes exceptions) {
 	    this.exceptions = exceptions;
     }
 	public void parse() {
@@ -54,7 +54,7 @@ public class ParseLog {
 	}
 
 	public void error(String[] split) {
-		exceptions.addFirst(split[0], new Times(0));
+		exceptions.add(split[1], split[0]);
 		System.out.println("Error");
 	}
 

@@ -40,10 +40,3 @@ public class ExcepTypes {
 
 
 }
-
-/*
-What do I want the program to call?
-
-system.out.println();
-
- */
