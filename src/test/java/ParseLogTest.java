@@ -1,6 +1,6 @@
+
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.*;
 
 public class ParseLogTest {
@@ -19,5 +19,4 @@ public class ParseLogTest {
         parser.error(string.split("[|]"));
         assertEquals(exceptionList, parser.exceptions);
     }
-
 }
