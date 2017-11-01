@@ -17,9 +17,7 @@ public class ExcepTypes {
      * @return nothing
      * @peram nothing
      */
-    ExcepTypes() {
-        excepTypes.add(new Excep("0000-00-00 00:00:00,000", "NewException"));
-    }
+    ExcepTypes() { }
 
     /**
      * This is the constructor for ExcepType it is the construtor that should be

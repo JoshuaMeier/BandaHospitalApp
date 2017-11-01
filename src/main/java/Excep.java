@@ -1,17 +1,37 @@
 import java.util.LinkedList;
 
+
+
+/**
+ * This is the lower level class for the Banda hospital app data structure.
+ *      It has a lower level LinkedList that holds its data. Its also carries
+ *      the name of the Exception.
+ */
 public class Excep extends LinkedList{
-    String nameOfExcep, dateAndTime;
+
+    String nameOfExcep, dateAndTime, errorMessage;
 
     LinkedList times = new LinkedList<String>();
 
-    Excep() {
-        nameOfExcep = "NewException";
-        times.add("0000-00-00 00:00:00,000");
+    /**
+     *
+     */
+    Excep() { }
+
+    /**
+     *
+     * @param dateAndTime
+     * @param nameOfExcep
+     */
+    Excep(String dateAndTime, String nameOfExcep, String errorMessage) {
+        this.nameOfExcep = nameOfExcep;
+        this.errorMessage = errorMessage;
+        times.add(dateAndTime);
     }
 
-    Excep(String dateAndTime, String nameOfExcep) {
+    public add(String dateAndTime, String nameOfExcep, String errorMessage) {
         this.nameOfExcep = nameOfExcep;
+        this.errorMessage = errorMessage;
         times.add(dateAndTime);
     }
 
@@ -27,6 +47,14 @@ public class Excep extends LinkedList{
         return times;
     }
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
     public void setNameOfExcep(String nameOfExcep) {
         this.nameOfExcep = nameOfExcep;
     }
@@ -38,4 +66,6 @@ public class Excep extends LinkedList{
     public void setTimes(LinkedList times) {
         this.times = times;
     }
+
+
 }

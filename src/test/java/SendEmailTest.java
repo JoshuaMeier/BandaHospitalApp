@@ -31,5 +31,4 @@ public class SendEmailTest {
                 "testMessage","ERROR - errorhandler_jsp._jspService(159)");
         assertThat(greenMail.getReceivedMessages()[0].getContent(), equalTo("testMessage\r\n"));
     }
-
 }
