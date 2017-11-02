@@ -1,61 +1,70 @@
+import java.io.*;
+import java.nio.file.Path;
+import java.util.ArrayList;
+
 public class ParseLog {
 	//This will be how logs are parsed into our program
-	String[] split = null;
-	ExcepTypes exceptions = null;
-	private String log;
-	public ParseLog(String log, ExcepTypes exceptions) {
-	    this.log = log;
-	    this.exceptions = exceptions;
-    }
-    public ParseLog(ExcepTypes exceptions) {
-	    this.exceptions = exceptions;
-    }
-	public void parse() {
-		//splitting the log message into parts
-		split = log.split("[|]");
-		//System.out.println(split[1]);
-		//Determine if it is a Warning, Info, or Error
-		switch(split[0].charAt(0)) {
-			case 'W':
-				warn();
-				break;
-			case 'I':
-				info();
-				break;
-			case 'E':
-				error(split);
-				break;
+	static String[] split = null;
+
+	public static void readLog (Path dir) {
+		InputStream fin;
+		BufferedReader reader;
+		StringBuilder builder;
+		File file;
+		String log;
+		String temp;
+		Config config = new Config();
+
+		try {
+
+			file = new File(dir.toString() + "\\" + config.getProperty("fileName"));
+			fin = new FileInputStream(file);
+			reader = new BufferedReader(new InputStreamReader(fin));
+
+			// TODO: 10/18/2017 optimize this
+			log = reader.readLine();
+			builder = new StringBuilder(log);
+            split = log.split("[|]");
+            String excepName = split[0];
+            String excepTime = split[1];
+            switch(excepName.charAt(0)) {
+                case 'W':
+                    if(config.getProperty("Warning").equals("true"))
+                    //warn();
+                    break;
+                case 'I':
+                    if(config.getProperty("Information").equals("true"))
+                   // info();
+                    break;
+                case 'E':
+                	if(!(BandaHealthLogs.excepTypes.containsKey(excepName))) {
+						BandaHealthLogs.excepTypes.put(excepName, new ArrayList<>());
+						while (true) {
+
+							temp = reader.readLine();
+							if (!(temp.matches("^WARN.*") || temp.matches("^INFO.*"))) {
+								builder.append(temp + "\n");
+							} else {
+								break;
+							}
+						}
+						BandaHealthLogs.excepTypes.get(excepName).add(new Excep());
+						BandaHealthLogs.excepTypes.get(excepName).get(BandaHealthLogs.excepTypes.get(excepName).size()-1).add(excepTime, builder.toString());
+					} else {
+                	    //only storing the message on the first occurrence
+                		BandaHealthLogs.excepTypes.get(excepName).get(BandaHealthLogs.excepTypes.get(excepName).size()-1).add(excepTime, null);
+					}
+					SendEmail.send(builder.toString(), excepName + excepTime);
+                    break;
+            }
+
+			fin.close();
+			reader.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println();
 		}
 	}
-    public void parse(String log) {
-        //splitting the log message into parts
-        split = log.split("[|]");
-        //System.out.println(split[1]);
-        //Determine if it is a Warning, Info, or Error
-        switch(split[0].charAt(0)) {
-            case 'W':
-                warn();
-                break;
-            case 'I':
-                info();
-                break;
-            case 'E':
-                error(split);
-                break;
-        }
-    }
-
-	public void warn() {
-		System.out.println("Warning");
-	}
-
-	public void info() {
-		System.out.println("Information");
-	}
-
-	public void error(String[] split) {
-		exceptions.add(split[1], split[0]);
-		System.out.println("Error");
-	}
-
 }
