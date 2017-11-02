@@ -57,6 +57,5 @@ public class ExcepTypes {
         this.dateAndTime = dateAndTime;
     }
 
-
 }
 
