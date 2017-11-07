@@ -8,13 +8,11 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class SendEmail {
-    // Get system properties
-    private static Properties properties = new Properties();
-    static Session session;
-    static Config config = new Config();
 
     public static void send(String errorMessage, String subject) {
-
+        Config config = new Config();
+        Properties properties = new Properties();
+        Session session;
         // Setup mail server
         properties.put("mail.smtp.host", config.getProperty("smtpHost"));
         properties.put("mail.smtp.socketFactory.port", config.getProperty("smtpPort"));
@@ -36,6 +34,8 @@ public class SendEmail {
                             return new PasswordAuthentication(user, password);
                         }
                     });
+        } else {
+            session = Session.getInstance(properties);
         }
 
 
@@ -71,6 +71,8 @@ public class SendEmail {
     }
 
     public static void send(String sender, String receiver, String errorMessage, String subject, String host, int port) {
+        Properties properties = new Properties();
+        Session session;
 
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", Integer.toString(port));

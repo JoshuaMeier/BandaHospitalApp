@@ -13,6 +13,7 @@ public class ExcepTest {
     @Test
     public void add() throws Exception {
         excep1.add(time, message);
-        assertEquals(excep1, excep2);
+        assertEquals(excep1.message, excep2.message);
+        assertEquals(excep1.time, excep2.time);
     }
 }
