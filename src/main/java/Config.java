@@ -9,7 +9,7 @@ public class Config {
     public Config() {
         configFile = new Properties();
         try {
-            file = new File("D:\\Users\\jmbla.DESKTOP-L5RS36I\\Documents\\Software Engineering 2\\BandaHospitalApp\\config.cfg");
+            file = new File(".\\config.cfg");
             fin = new FileInputStream(file);
             configFile.load(fin);
         } catch(Exception e){
