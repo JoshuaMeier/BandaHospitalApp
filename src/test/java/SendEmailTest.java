@@ -25,7 +25,7 @@ public class SendEmailTest {
     public void tearDown() throws Exception {
         greenMail.stop();
     }
-    @Ignore
+
     @Test
     public void send() throws Exception {
         mailSender.send("testSender@gmail.com", "testReceive@gmail.com",
