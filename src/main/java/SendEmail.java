@@ -25,8 +25,8 @@ public class SendEmail {
             properties.put("mail.smtp.auth", "true");
 
             // Sending email with Google's SMTP
-            final String user = "letusoftwareengineeringtest@gmail.com";
-            final String password = "HamboneandSwoop";
+            final String user = config.getProperty("user");
+            final String password = config.getProperty("password");
 
             session = Session.getInstance(properties,
                     new javax.mail.Authenticator() {
