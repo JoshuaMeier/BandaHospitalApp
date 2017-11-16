@@ -21,7 +21,7 @@ public class ParseLog {
 
 		try {
 
-			file = new File(dir.toString() + "\\" + config.getProperty("fileName"));
+			file = new File(dir.toString() + "/" + config.getProperty("fileName"));
 			fin = new FileInputStream(file);
 			reader = new BufferedReader(new InputStreamReader(fin));
 
@@ -67,9 +67,6 @@ public class ParseLog {
 			e.printStackTrace();
 		} catch (IOException e) {
 			System.err.println();
-		} finally {
-		    split = null;
-		    builder = null;
-        }
+		}
 	}
 }

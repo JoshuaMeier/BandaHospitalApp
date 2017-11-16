@@ -36,7 +36,7 @@ public class BandaHealthLogs extends Thread {
                       }
 
                       if (kind == ENTRY_MODIFY) {
-                          if (filename.toString().equals("catalina.out")) {
+                          if (filename.toString().equals(config.getProperty("fileName"))) {
                               executor.execute(new BandaHealthLogs());
                           }
                       }
