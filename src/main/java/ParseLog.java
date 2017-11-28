@@ -15,6 +15,8 @@ public class ParseLog {
 		String log;
 		String[] split;
 		String temp;
+        String excepName;
+        String excepTime;
 		Config config = new Config();
 
 		Path dir = FileSystems.getDefault().getPath(config.getProperty("logPath"));
@@ -28,8 +30,14 @@ public class ParseLog {
 			log = reader.readLine();
 			builder = new StringBuilder(log);
             split = log.split("[|]");
-            String excepName = split[0];
-            String excepTime = split[1];
+            if(log.matches(".\\|.\\|.")) {
+				excepName = split[0];
+				excepTime = split[1];
+			} else {
+                excepName = log;
+                split = log.split("[:]");
+                excepTime = split[0] + split[1];
+            }
             switch(excepName.charAt(0)) {
                 case 'W':
                     if(config.getProperty("Warning").equals("true"))
