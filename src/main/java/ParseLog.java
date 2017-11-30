@@ -1,3 +1,4 @@
+import org.apache.commons.io.input.ReversedLinesFileReader;
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -9,14 +10,13 @@ public class ParseLog {
 	public  void readLog () {
 
 		InputStream fin = null;
-		BufferedReader reader = null;
-		StringBuilder builder;
+		ReversedLinesFileReader reader = null;
+		StringBuilder builder = new StringBuilder();
 		File file;
 		String log;
 		String[] split;
-		String temp;
-        String excepName;
-        String excepTime;
+        StringBuilder excepName = new StringBuilder();
+        StringBuilder excepTime = new StringBuilder();
 		Config config = new Config();
 
 		Path dir = FileSystems.getDefault().getPath(config.getProperty("logPath"));
@@ -25,49 +25,29 @@ public class ParseLog {
 
 			file = new File(dir.toString() + "/" + config.getProperty("fileName"));
 			fin = new FileInputStream(file);
-			reader = new BufferedReader(new InputStreamReader(fin));
+			reader = new ReversedLinesFileReader(file);
 
-			log = reader.readLine();
-			builder = new StringBuilder(log);
-            split = log.split("[|]");
-            if(log.matches(".\\|.\\|.")) {
-				excepName = split[0];
-				excepTime = split[1];
-			} else {
-                excepName = log;
-                split = log.split("[:]");
-                excepTime = split[0] + split[1];
-            }
-            switch(excepName.charAt(0)) {
+            builder = getLogMessage(builder, reader, excepName, excepTime);
+            switch(excepName.toString().charAt(0)) {
                 case 'W':
                     if(config.getProperty("Warning").equals("true"))
-                    //warn();
+                        SendEmail.send(builder.toString(), excepName.toString() + excepTime.toString());
                     break;
                 case 'I':
                     if(config.getProperty("Information").equals("true"))
-                   // info();
+                        SendEmail.send(builder.toString(), excepName.toString() + excepTime.toString());
                     break;
                 case 'E':
-                	if(!(BandaHealthLogs.excepTypes.containsKey(excepName))) {
-						BandaHealthLogs.excepTypes.put(excepName, new ArrayList<>());
-						while (true) {
-
-							temp = reader.readLine();
-							if (!(temp.matches("^WARN.*") || temp.matches("^INFO.*") || temp.matches("^ERROR.*"))) {
-								builder.append(temp + "\n");
-							} else {
-								break;
-							}
-						}
-						BandaHealthLogs.excepTypes.get(excepName).add(new Excep());
-						BandaHealthLogs.excepTypes.get(excepName).get(BandaHealthLogs.excepTypes.get(excepName).size()-1).add(excepTime, builder.toString());
-                        SendEmail.send(builder.toString(), excepName + excepTime);
-					} else {
-                	    //only storing the message on the first occurrence
-                		BandaHealthLogs.excepTypes.get(excepName).get(BandaHealthLogs.excepTypes.get(excepName).size()-1).add(excepTime, null);
-                        SendEmail.send(builder.toString(), excepName + excepTime);
-					}
-
+                    if (!(BandaHealthLogs.excepTypes.containsKey(excepName.toString()))) {
+                        BandaHealthLogs.excepTypes.put(excepName.toString(), new ArrayList<>());
+                        BandaHealthLogs.excepTypes.get(excepName.toString()).add(new Excep());
+                        BandaHealthLogs.excepTypes.get(excepName.toString()).get(BandaHealthLogs.excepTypes.get(excepName.toString()).size() - 1).add(excepTime.toString(), builder.toString());
+                        SendEmail.send(builder.toString(), excepName.toString() + excepTime.toString());
+                    } else {
+                        //only storing the message on the first occurrence
+                        BandaHealthLogs.excepTypes.get(excepName.toString()).get(BandaHealthLogs.excepTypes.get(excepName.toString()).size() - 1).add(excepTime.toString(), null);
+                        SendEmail.send(builder.toString(), excepName.toString() + excepTime.toString());
+                    }
             }
 			fin.close();
             reader.close();
@@ -77,4 +57,46 @@ public class ParseLog {
 			System.err.println();
 		}
 	}
+
+	private StringBuilder getLogMessage(StringBuilder builder, ReversedLinesFileReader reader, StringBuilder excepName, StringBuilder excepTime) {
+	    String temp;
+	    String log;
+	    String[] split;
+	    ArrayList<String> tempLog = new ArrayList<>();
+
+	    try {
+
+            while (true) {
+
+                temp = reader.readLine();
+                if (!(temp.matches("^WARN.*") || temp.matches("^INFO.*") || temp.matches("^ERROR.*"))) {
+                    tempLog.add(temp + "\n");
+                } else {
+                    tempLog.add(temp + "\n");
+                    split = temp.split("[|]");
+                    if(temp.matches(".*\\|.*")) {
+                        excepName = excepName.append(split[0]);
+                        excepTime = excepTime.append(split[1]);
+                    } else {
+                        excepName = excepName.append(temp);
+                        split = temp.split("[:]");
+                        excepTime = excepTime.append(split[0] + split[1]);
+                    }
+                    break;
+                }
+            }
+            if(tempLog.size() == 1)
+                builder.append(tempLog.get(0));
+            else {
+                for (int i = tempLog.size()-1; i > 0; i--) {
+                    builder.append(tempLog.get(i));
+                }
+            }
+
+        } catch (IOException e) {
+	        System.err.println();
+        }
+
+        return builder;
+    }
 }
