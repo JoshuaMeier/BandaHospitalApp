@@ -9,7 +9,7 @@ public class Config {
     public Config() {
         configFile = new Properties();
         try {
-            file = new File("../lib/config.cfg");
+            file = new File("./config.cfg");
             fin = new FileInputStream(file);
             configFile.load(fin);
         } catch(Exception e){
